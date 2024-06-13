@@ -1,23 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Management;
-using System.Net.NetworkInformation;
-using System.ComponentModel;
-using System.Xml;
-using TinyNvidiaUpdateChecker.Handlers;
-using Microsoft.Win32;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using HtmlAgilityPack;
+using System.Net;
 using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml;
+using HtmlAgilityPack;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using TinyNvidiaUpdateChecker.Handlers;
+using HtmlDocument = HtmlAgilityPack.HtmlDocument;
+using ProgressBar = TinyNvidiaUpdateChecker.Handlers.ProgressBar;
 
 namespace TinyNvidiaUpdateChecker
 {
@@ -74,50 +76,50 @@ namespace TinyNvidiaUpdateChecker
         /// <summary>
         /// Disable "Press any key to exit..." prompt
         /// </summary>
-        public static bool noPrompt = false;
+        public static bool noPrompt;
 
 	    /// <summary>
         /// Dry run
         /// </summary>
-	    public static bool dryRun = false;    
+	    public static bool dryRun;    
 
         /// <summary>
         /// Enable extended information
         /// </summary>
-        public static bool debug = false;
+        public static bool debug;
 
         /// <summary>
         /// Force a prompt to download GPU drivers
         /// </summary>
-        private static bool forceDL = false;
+        private static bool forceDL;
 
         /// <summary>
         /// Will automaticly download and install drivers
         /// </summary>
-        public static bool confirmDL = false;
+        public static bool confirmDL;
 
         /// <summary>
         /// If this value is set then it will override the default configuration file location
         /// </summary>
-        public static string overrideConfigFileLocation = null;
+        public static string overrideConfigFileLocation;
 
         /// <summary>
         /// Override chassis type. Used for example notebook systems with desktop e-GPUs
         /// </summary>
-        public static int overrideChassisType = 0;
+        public static int overrideChassisType;
 
         /// <summary>
         /// Has the intro been displayed? Because we do not want to display the intro multiple times.
         /// </summary>
-        private static bool hasRunIntro = false;
+        private static bool hasRunIntro;
 
         public static HttpClient httpClient = new();
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool AllocConsole();
+        private static extern bool AllocConsole();
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool FreeConsole();
+        private static extern bool FreeConsole();
 
         [STAThread]
         private static void Main(string[] args)
@@ -172,7 +174,7 @@ namespace TinyNvidiaUpdateChecker
             releaseDesc = Uri.UnescapeDataString(downloadInfo["ReleaseNotes"].ToString());
 
             // Cleanup release description
-            var htmlDocument = new HtmlAgilityPack.HtmlDocument();
+            var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(releaseDesc);
 
             // Remove image nodes
@@ -387,7 +389,7 @@ namespace TinyNvidiaUpdateChecker
             int osId = 0;
             var nameRegex = new Regex(@"(?<=NVIDIA )(.*(?= \([A-Z]+\))|.*(?= [0-9]+GB)|.*(?= with Max-Q Design)|.*(?= COLLECTORS EDITION)|.*)");
             List<int> notebookChassisTypes = [1, 8, 9, 10, 11, 12, 14, 18, 21, 31, 32];
-            var gpuList = new List<GPU> { };
+            var gpuList = new List<GPU>();
             OSClassRoot osData = MetadataHandler.RetrieveOSData();
 
             // Check for notebook
@@ -444,9 +446,9 @@ namespace TinyNvidiaUpdateChecker
             var gpuSearch = new ManagementObjectSearcher("SELECT Name, DriverVersion, PNPDeviceID FROM Win32_VideoController").Get();
 
             foreach (ManagementObject gpu in gpuSearch) {
-                string rawName = gpu["Name"].ToString();
-                string rawVersion = gpu["DriverVersion"].ToString().Replace(".", string.Empty);
-                string pnp = gpu["PNPDeviceID"].ToString();
+                string? rawName = gpu["Name"].ToString();
+                string? rawVersion = gpu["DriverVersion"].ToString()?.Replace(".", string.Empty);
+                string? pnp = gpu["PNPDeviceID"].ToString();
 
                 // Is it a GPU?
                 if (pnp.Contains("&DEV_")) {
@@ -456,7 +458,7 @@ namespace TinyNvidiaUpdateChecker
 
                     // Are drivers installed for this GPU? If not Windows reports a generic GPU name which is not sufficient
                     if (Regex.IsMatch(rawName, @"^NVIDIA") && nameRegex.IsMatch(rawName)) {
-                        string gpuName = nameRegex.Match(rawName).Value.Trim().Replace("Super", "SUPER");
+                        string? gpuName = nameRegex.Match(rawName).Value.Trim().Replace("Super", "SUPER");
                         string cleanVersion = rawVersion.Substring(rawVersion.Length - 5, 5).Insert(3, ".");
 
                         gpuList.Add(new GPU(gpuName, cleanVersion, vendorID, deviceID, true, isNotebook, isDchDriver));
@@ -570,9 +572,9 @@ namespace TinyNvidiaUpdateChecker
                     }
 
                     return (JObject)driverObj["IDS"][0]["downloadInfo"];
-                } else {
-                    throw new ArgumentOutOfRangeException();
                 }
+
+                throw new ArgumentOutOfRangeException();
             } catch (ArgumentOutOfRangeException) {
                 string driverType = ConfigurationHandler.ReadSetting("Driver type");
 
@@ -860,7 +862,7 @@ namespace TinyNvidiaUpdateChecker
             try {
                 using WebClient webClient = new();
                 var notifier = new AutoResetEvent(false);
-                var progress = new Handlers.ProgressBar();
+                var progress = new ProgressBar();
 
                 webClient.DownloadProgressChanged += delegate (object sender, DownloadProgressChangedEventArgs e) {
                     progress.Report((double)e.ProgressPercentage / 100);

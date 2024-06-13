@@ -204,9 +204,9 @@ namespace TinyNvidiaUpdateChecker.Handlers
             if (!MainConsole.confirmDL) {
                 DialogResult dialogResult = MessageBox.Show(text, "TinyNvidiaUpdateChecker", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 return dialogResult == DialogResult.Yes ? values[0] : values[1];
-            } else {
-                return defaultValue;
             }
+
+            return defaultValue;
         }
 
         public static string ShowButtonDialog(string title, string text, TaskDialogIcon icon, TaskDialogButton[] buttonList)
@@ -237,19 +237,22 @@ namespace TinyNvidiaUpdateChecker.Handlers
 
             if (read == "true") {
                 return true;
-            } else if (read == "false") {
+            }
+
+            if (read == "false") {
                 return false;
-            } else {
+            }
 
-                // setup and read
-                SetupSetting(key);
-                read = ReadSetting(key);
+            // setup and read
+            SetupSetting(key);
+            read = ReadSetting(key);
 
-                if (read == "true") {
-                    return true;
-                } else if (read == "false") {
-                    return false;
-                }
+            if (read == "true") {
+                return true;
+            }
+
+            if (read == "false") {
+                return false;
             }
             Console.WriteLine($"Could not retrive the key '{key}', this is bad!");
             return false;

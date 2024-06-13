@@ -18,10 +18,10 @@ namespace TinyNvidiaUpdateChecker.Handlers
 
         private readonly Timer timer;
 
-        private double currentProgress = 0;
+        private double currentProgress;
         private string currentText = string.Empty;
-        private bool disposed = false;
-        private int animationIndex = 0;
+        private bool disposed;
+        private int animationIndex;
 
         public ProgressBar()
         {

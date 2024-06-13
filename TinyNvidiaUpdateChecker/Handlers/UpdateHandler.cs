@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace TinyNvidiaUpdateChecker.Handlers
 {

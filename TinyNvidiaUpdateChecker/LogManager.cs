@@ -32,9 +32,6 @@ namespace TinyNvidiaUpdateChecker
                 case Level.SETTING:
                     logMessage = "[SETTING] " + msg;
                     break;
-
-                default:
-                    break;
             }
 
             Debug.WriteLine(logMessage);

@@ -22,9 +22,9 @@ namespace TinyNvidiaUpdateChecker
                 ShowDialog();
 
                 return selectedLanguageCode;
-            } else {
-                return "uk";
             }
+
+            return "uk";
         }
 
         private void LocationChooserForm_Load(object sender, EventArgs e)

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 public class OSClass
@@ -9,9 +8,9 @@ public class OSClass
     public int id { get; set; }
 }
 
-public class GPU(string name, string version, string vendorId, string deviceId, bool isValidated, bool isNotebook, bool isDch)
+public class GPU(string? name, string version, string vendorId, string deviceId, bool isValidated, bool isNotebook, bool isDch)
 {
-    public string name { get; set; } = name;
+    public string? name { get; set; } = name;
     public string version { get; set; } = version;
     public string vendorId { get; set; } = vendorId;
     public string deviceId { get; set; } = deviceId;

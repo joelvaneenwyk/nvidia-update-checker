@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace TinyNvidiaUpdateChecker
 {
@@ -7,7 +8,7 @@ namespace TinyNvidiaUpdateChecker
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -190,15 +191,15 @@ namespace TinyNvidiaUpdateChecker
 
         #endregion
 
-        private System.Windows.Forms.Button DownloadInstallButton;
-        private System.Windows.Forms.Button DownloadBtn;
-        private System.Windows.Forms.Button NotesBtn;
-        private System.Windows.Forms.Label titleLabel;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label versionLabel;
-        private System.Windows.Forms.Label releasedLabel;
-        private System.Windows.Forms.Button IgnoreBtn;
-        private System.Windows.Forms.WebBrowser webBrowser1;
+        private Button DownloadInstallButton;
+        private Button DownloadBtn;
+        private Button NotesBtn;
+        private Label titleLabel;
+        private GroupBox groupBox1;
+        private Label versionLabel;
+        private Label releasedLabel;
+        private Button IgnoreBtn;
+        private WebBrowser webBrowser1;
         private ToolTip toolTip1;
         private Label sizeLabel;
     }

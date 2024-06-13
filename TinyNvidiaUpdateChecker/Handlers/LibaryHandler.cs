@@ -1,10 +1,10 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using Microsoft.Win32;
 
 namespace TinyNvidiaUpdateChecker.Handlers
 {
@@ -12,9 +12,9 @@ namespace TinyNvidiaUpdateChecker.Handlers
     class LibaryHandler
     {
 
-        private static bool is64 = Environment.Is64BitOperatingSystem;
+        private static readonly bool is64 = Environment.Is64BitOperatingSystem;
 
-        static List<LibaryRegistryPath> libaryRegistryList =
+        private static readonly List<LibaryRegistryPath> libaryRegistryList =
             [
                 /* WinRAR */
 

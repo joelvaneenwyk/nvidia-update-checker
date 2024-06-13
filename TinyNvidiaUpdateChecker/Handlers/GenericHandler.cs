@@ -33,7 +33,6 @@ namespace TinyNvidiaUpdateChecker.Handlers
             consoleMode &= ~ENABLE_QUICK_EDIT;
 
             if (!SetConsoleMode(consoleHandle, consoleMode)){
-                return;
             }
         }
     }

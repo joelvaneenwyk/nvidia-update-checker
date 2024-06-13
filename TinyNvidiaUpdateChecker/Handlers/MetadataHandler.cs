@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TinyNvidiaUpdateChecker.Handlers
 {
@@ -44,7 +44,7 @@ namespace TinyNvidiaUpdateChecker.Handlers
             }
         }
 
-        public static (bool, int) GetGpuIdFromName(string name, bool isNotebook)
+        public static (bool, int) GetGpuIdFromName(string? name, bool isNotebook)
         {
             try {
                 int gpuId = (int)cachedGPUData[isNotebook ? "notebook" : "desktop"][name];

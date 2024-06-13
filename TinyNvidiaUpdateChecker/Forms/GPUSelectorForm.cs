@@ -7,7 +7,7 @@ namespace TinyNvidiaUpdateChecker
 {
     public partial class GPUSelectorForm : Form
     {
-        List<GPU> gpuList = null;
+        List<GPU> gpuList;
         Dictionary<int, int> validatedList = new();
         int selectedGpuId;
 

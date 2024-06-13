@@ -1,11 +1,14 @@
-﻿namespace TinyNvidiaUpdateChecker
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace TinyNvidiaUpdateChecker
 {
     partial class LocationChooserForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -85,8 +88,8 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button ConfirmBtn;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox;
+        private Button ConfirmBtn;
+        private Label label1;
+        private ComboBox comboBox;
     }
 }
